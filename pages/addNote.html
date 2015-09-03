@@ -1,0 +1,288 @@
+<!--Page Title-->
+<div id="page-title">
+	<h1 class="page-header text-overflow">{{formData.alertId ? 'Update' : 'Add'}} Note</h1>
+</div>
+<!--End page title-->
+
+<!--Page content-->
+<div id="page-content">			
+	<div  ng-switch on="state">
+		<div ng-switch-when="submitted" class="alert alert-success" role="alert">
+			<strong>Well done!</strong> You successfully {{formData.alertId ? 'updated' : 'added'}} a note.
+		</div>
+		<form ng-switch-when="form" novalidate ng-submit="submitForm(form)" name="form" class="form-horizontal" role="form">
+		
+			<div class="tab-base tab-stacked-left">
+						
+				<!--Nav tabs-->
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a data-toggle="tab" data-target="#tab-when" aria-expanded="true">When</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-what" aria-expanded="false">What</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-where" aria-expanded="false">Where</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-why" aria-expanded="false">Why</a>
+					</li>
+				</ul>
+	
+				<!--Tabs Content-->
+				<div class="tab-content">
+					<div id="tab-when" class="tab-pane fade active in">											
+						<div class="form-group" ng-class="{ 'has-error' : form.startDate.$invalid && submitted }">
+							<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.startDate" name="startDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.startDate.$invalid && submitted" class="help-block">Start date is required.</p>
+							</div>				
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.endDate.$invalid && submitted }">
+							<label for="endDate" class="col-sm-2 control-label">End Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.endDate" name="endDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.endDate.$invalid && submitted" class="help-block">End date is required.</p>
+							</div>				
+						</div>												
+					</div>
+					<div id="tab-what" class="tab-pane fade">
+						<div class="form-group">
+							<label for="type" class="col-sm-2 control-label">Group</label>
+							<div class="col-sm-10">
+								<select name="type" ng-model="formData.groupId" class="form-control">
+									<option ng-repeat="group in groups" value="{{group.groupId}}">{{group.item.name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.description.$invalid && submitted }">
+							<label for="description" class="col-sm-2 control-label">Description</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.description" required name="description" type="text" placeholder="Pesach 2015" class="form-control">
+								<p ng-show="form.description.$invalid && submitted" class="help-block">Description is required.</p>
+							</div>
+						</div>
+						<div class="form-group" ng-repeat="variant in formData.item.variants">
+							<hr ng-show="variant != formData.item.variants[0]">
+							<ng-form name="innerForm"><!-- inner form so validation work for dynamic names -->
+								<label class="col-sm-2 control-label">Note Variant {{$index + 1}}</label>
+								<div class="col-xs-10">
+									<div class="form-horizontal">
+										<div class="form-group" ng-class="{ 'has-error' : innerForm.site.$invalid && submitted }">
+											<label for="Platform" class="col-sm-3 control-label">Sites</label>
+											<div class="col-sm-9">
+												<select required name="site" ng-model="variant.sites" multiple class="form-control">
+													<option>Regular</option>
+													<option>EDU</option>
+													<option>GSA</option>
+													<option>B2B</option>
+												</select>
+												<p ng-show="innerForm.site.$invalid && submitted" class="help-block">Please select a site.</p>
+											</div>
+										</div>
+										<div class="form-group"">
+											<label for="html" class="col-sm-3 control-label">
+											B2B list 
+											<span bp-info class="glyphicon glyphicon-info-sign" data-toggle="popover" title="Info" data-content="If b2b is selected in the sites input, you can specify a comma delimited list of b2b's."></span>	
+											</label>
+											<div class="col-sm-9">
+												<input ng-model="variant.b2blist" name="b2blist" type="text" placeholder="34,67,87" class="form-control">
+											</div>
+										</div>
+										<div class="form-group" ng-class="{ 'has-error' : innerForm.language.$invalid && submitted }">
+											<label for="type" class="col-sm-2 control-label">Language</label>
+											<div class="col-sm-10">
+												<select required name="language" ng-model="variant.language" class="form-control">
+													<option value="All">All</option>
+													<option value="E">English</option>
+													<option value="P">Portuguese</option>
+													<option value="S">Spanish</option>
+												</select>
+												<p ng-show="innerForm.language.$invalid && submitted" class="help-block">Please select a Language.</p>
+											</div>
+										</div>
+										<div class="form-group" ng-class="{ 'has-error' : innerForm.condensedNote.$invalid && submitted }">
+											<label for="html" class="col-sm-2 control-label">
+												Condensed Note
+												<span bp-info class="glyphicon glyphicon-info-sign" data-toggle="popover" title="Info" data-content="To inject a countdown widget into the note, add {countdown} as a place holder. Or to get ship times from the database, add {{shipCutOffWidget}<!---->}."></span>
+											</label>
+											<div class="col-sm-10">
+												<input ng-model="variant.condensedNote" required ng-keyup="checkForWidgets($event)" name="condensedNote" type="text" placeholder="<span>B&H will be closed on Saturday</span>" class="form-control">
+												<p ng-show="innerForm.condensedNote.$invalid && submitted" class="help-block">Note is required.</p>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="html" class="col-sm-2 control-label">
+												Expanded Note
+												<span bp-info class="glyphicon glyphicon-info-sign" data-toggle="popover" title="Info" data-content="To inject a countdown widget into the note, add {countdown} as a place holder. Or to get ship times from the database, add {{shipCutOffWidget}<!---->}."></span>						
+											</label>
+											<div class="col-sm-10">
+												<textarea ng-model="variant.expandedNote" ng-keyup="checkForWidgets($event)" name="expandedNote" placeholder="<span>B&H will be closed on Saturday</span>" class="form-control"></textarea>
+											</div>
+										</div>		
+										<div ng-if="variant.showShipCutOffWidget" class="form-group"">
+											<label for="html" class="col-sm-2 control-label">
+												Shipping Cutoff widget				
+											</label>
+											<div class="col-sm-10">
+												<input ng-model="variant.shipCutOffWidget" name="formData.item.shipCutOffWidget" type="text" placeholder="{{id=502|column=STD_CUTOFF|format=EEEE, MMMM d 'before' h:mmaa}<!---->}" class="form-control">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="html" class="col-sm-2 control-label">Expanded Title</label>
+											<div class="col-sm-10">
+												<input ng-model="variant.expandedTitle" name="expandedTitle" type="text" placeholder="Upcomping Holiday Schedule" class="form-control">
+											</div>
+										</div>
+										<div class="form-group text-right">
+											<div class="col-sm-offset-2 col-sm-10">
+												<div class="btn btn-warning" ng-click="removeVariant(formData.item.variants[$index], $index)" ng-show="$index > 0">Remove</div>
+												<div class="btn btn-primary" ng-click="previewVariant($index)">Preview</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ng-form>
+						</div>
+						<div class="form-group text-right">
+					    	<div class="col-sm-offset-2 col-sm-10">
+					        	<div class="btn btn-default" ng-click="addVariant()">Add Variant</div>
+					    	</div>
+					    </div>
+						<div class="form-group">
+							<label for="link" class="col-sm-2 control-label">Link</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.link" name="link" type="text" placeholder="http://www.bhphotovideo.com" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+						 	<label for="html" class="col-sm-2 control-label">Docked</label>
+					        <div class="col-sm-10 ">	
+					        	<div class="checkbox">	         
+					              	<label><input type="checkbox" ng-model="formData.item.docked">Docked</label>
+					            </div>
+					        </div>
+					    </div>
+						<div class="form-group">
+						 <label for="html" class="col-sm-2 control-label">Overwrite 1st note</label>
+					        <div class="col-sm-10 ">	
+					        	<div class="checkbox">	         
+					              	<label><input type="checkbox" ng-model="formData.item.showFirst"> Overwrite 1st note</label>
+					            </div>
+					        </div>
+					    </div>	
+					    <div class="form-group"">
+							<label for="html" class="col-sm-2 control-label">Countdown</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.countdown" name="countdown" type="text" placeholder="1421424535506" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+						 	<label for="notify" class="col-sm-2 control-label">Enable Notify</label>
+					        <div class="col-sm-10 ">	
+					        	<div class="checkbox">	         
+					              	<label><input type="checkbox" ng-model="formData.item.notify">Enable Notify</label>
+					            </div>
+					        </div>
+					    </div>
+					    <div class="form-group">
+						 	<label for="closeable" class="col-sm-2 control-label">Closeable</label>
+					        <div class="col-sm-10 ">	
+					        	<div class="checkbox">	         
+					              	<label><input type="checkbox" ng-model="formData.item.closeable">Closeable</label>
+					            </div>
+					        </div>
+					    </div>
+						<div class="form-group" ng-class="{ 'has-error' : form.type.$invalid && submitted }">
+							<label for="type" class="col-sm-2 control-label">Type</label>
+							<div class="col-sm-10">
+								<select required name="type" ng-model="formData.item.type" class="form-control">
+									<option>schedule</option>
+									<option>info</option>
+									<option>alert</option>
+									<option>announcement</option>
+								</select>
+								<p ng-show="form.type.$invalid && submitted" class="help-block">Please select a type.</p>
+							</div>
+						</div>	
+					</div>
+					<div id="tab-where" class="tab-pane fade">
+						<div class="form-group" ng-class="{ 'has-error' : form.platform.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Platforms</label>
+							<div class="col-sm-10">
+								<select required name="platform" ng-model="formData.environments" multiple class="form-control">
+									<option>Mobile</option>
+									<option>Android</option>
+									<option>IPhone</option>
+									<option>IPad</option>
+									<option>Desktop</option>
+								</select>
+								<p ng-show="form.platform.$invalid && submitted" class="help-block">Please select a platform.</p>
+							</div>
+						</div>	
+						<div class="form-group" ng-class="{ 'has-error' : form.page.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Pages</label>
+							<div class="col-sm-10">
+								<select required name="page" ng-model="formData.item.pages" multiple class="form-control">
+									<option>Home</option>
+								</select>
+								<p ng-show="form.page.$invalid && submitted" class="help-block">Please select a page.</p>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="country" class="col-sm-2 control-label">Countries</label>
+							<div class="col-sm-10">
+								<select name="country" ng-model="formData.item.countries" multiple class="form-control">
+									<option>AU</option>
+									<option>CA</option>
+								</select>
+							</div>
+						</div>	
+					</div>
+					<div id="tab-why" class="tab-pane fade">
+						<h4 class="text-thin"></h4>
+					</div>
+				</div>
+			</div>
+			<div class="form-group pull-right">
+				<div class="col-sm-12">
+					<input class="btn btn-default" ng-click="generageQuery()" type="button" value="Generate Query">
+					<button type="submit" class="btn btn-primary ng-binding">{{submitTitle || 'Create'}}</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!--End page content-->
+<script type="text/ng-template" id="preview.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Live preview</h3>
+    </div>
+   	<div class="modal-body">
+       	<h1>{{variantToPreview.expandedTitle || 'No content specified'}}</h1>
+		<hr>
+		<div ng-bind-html="variantToPreview.condensedNote || 'No content specified'"></div>
+		<hr>
+		<div ng-bind-html="variantToPreview.expandedNote || 'No content specified'"></div>
+    </div>
+    <div class="modal-footer">
+       	<button class="btn btn-primary" ng-click="ok()">Done</button>
+   	</div>
+</script>
+<script type="text/ng-template" id="removeVariant.html">
+	<div class="modal-header">
+        <h3 class="modal-title">Remove Variant {{ variantCountForOutput }}</h3>
+    </div>
+	<div class="modal-body">
+		<div class="alert alert-warning" role="alert">
+       		Are you sure you want to remove variant {{ variantCountForOutput }}
+			<span ng-show="formData.alertId">from alert {{ formData.alertId }}</span>?
+		</div>
+    </div>
+	<div class="modal-footer">
+       	<button class="btn btn-primary" ng-click="ok()">I'm Sure</button>
+		<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+   	</div>
+</script>

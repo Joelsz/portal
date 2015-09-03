@@ -1,0 +1,106 @@
+<!--Page Title-->
+<div id="page-title">
+	<h1 class="page-header text-overflow">{{formData.alertId ? 'Update' : 'Add'}} Department Closed</h1>
+</div>
+<!--End page title-->
+
+<!--Page content-->
+<div id="page-content">			
+	<div  ng-switch on="state">
+		<div ng-switch-when="submitted" class="alert alert-success" role="alert">
+			<strong>Well done!</strong> You successfully {{formData.alertId ? 'updated' : 'added'}} a department closed alert.
+		</div>
+		<form ng-switch-when="form" novalidate ng-submit="submitForm(form)" name="form" class="form-horizontal" role="form">
+		
+			<div class="tab-base tab-stacked-left">
+						
+				<!--Nav tabs-->
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a data-toggle="tab" data-target="#tab-when" aria-expanded="true">When</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-what" aria-expanded="false">What</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-where" aria-expanded="false">Where</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-why" aria-expanded="false">Why</a>
+					</li>
+				</ul>
+	
+				<!--Tabs Content-->
+				<div class="tab-content">
+					<div id="tab-when" class="tab-pane fade active in">											
+						<div class="form-group" ng-class="{ 'has-error' : form.startDate.$invalid && submitted }">
+							<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.startDate" name="startDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.startDate.$invalid && submitted" class="help-block">Start date is required.</p>
+							</div>				
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.endDate.$invalid && submitted }">
+							<label for="endDate" class="col-sm-2 control-label">End Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.endDate" name="endDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.endDate.$invalid && submitted" class="help-block">End date is required.</p>
+							</div>				
+						</div>												
+					</div>
+					<div id="tab-what" class="tab-pane fade">
+						<div class="form-group" ng-class="{ 'has-error' : form.department.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Platforms</label>
+							<div class="col-sm-10">
+								<select required name="department"  multiple class="form-control" ng-model="formData.item.department">
+									<option value="sales">Sales</option>
+									<option value="customer service">Customer Service</option>
+									<option value="chat">Chat</option>
+								</select>
+								<p ng-show="form.department.$invalid && submitted" class="help-block">Please select a department.</p>
+							</div>
+						</div>
+					</div>
+					<div id="tab-where" class="tab-pane fade">	
+						<div class="form-group" ng-class="{ 'has-error' : form.platform.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Platforms</label>
+							<div class="col-sm-10">
+								<select required name="platform" ng-model="formData.environments" multiple class="form-control">
+									<option>Mobile</option>
+									<option>Android</option>
+									<option>IPhone</option>
+									<option>IPad</option>
+									<option>Desktop</option>
+								</select>
+								<p ng-show="form.platform.$invalid && submitted" class="help-block">Please select a platform.</p>
+							</div>
+						</div>
+					</div>
+					<div id="tab-why" class="tab-pane fade">
+						<h4 class="text-thin"></h4>
+					</div>
+				</div>
+			</div>
+			<div class="form-group pull-right">
+				<div class="col-sm-12">
+					<input class="btn btn-default" ng-click="generageQuery()" type="button" value="Generate Query">
+					<button type="submit" class="btn btn-primary ng-binding">{{submitTitle || 'Create'}}</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!--End page content-->
+<script type="text/ng-template" id="generateQuery.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Generated Query</h3>
+    </div>
+    <div class="modal-body">
+        MERGE INTO alerts a USING (SELECT 1{{formData.alertId}} alert_id, sysdate datetime from dual) b ON (a.alert_id = b.alert_id) 
+		WHEN MATCHED THEN UPDATE SET a.item = '{{formData.item}}', a.start_date = TO_DATE('{{formData.startDate | date : 'yyyy/MM/dd HH:mm:ss'}}', 'yyyy/mm/dd hh24:mi:ss'), a.end_date = TO_DATE('{{formData.endDate | date : 'yyyy/MM/dd HH:mm:ss'}}', 'yyyy/mm/dd hh24:mi:ss'), a.environments = '{{formData.environments}}'
+		WHEN NOT MATCHED THEN INSERT (type, item, environments, start_date, end_date, alert_id) VALUES ('departmentClosed', '{{formData.item}}', '{{formData.environments}}', TO_DATE('{{formData.startDate | date : 'yyyy/MM/dd HH:mm:ss'}}', 'yyyy/mm/dd hh24:mi:ss'), TO_DATE('{{formData.endDate | date : 'yyyy/MM/dd HH:mm:ss'}}', 'yyyy/mm/dd hh24:mi:ss'), b.alert_id);
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>

@@ -1,0 +1,124 @@
+<!--Page Title-->
+<div id="page-title">
+	<h1 class="page-header text-overflow">{{formData.alertId ? 'Update' : 'Add'}} HTML Banner</h1>
+</div>
+<!--End page title-->
+
+<!--Page content-->
+<div id="page-content">			
+	<div  ng-switch on="state">
+		<div ng-switch-when="submitted" class="alert alert-success" role="alert">
+			<strong>Well done!</strong> You successfully {{formData.alertId ? 'updated' : 'added'}} an page banner.
+		</div>
+		<form ng-switch-when="form" novalidate ng-submit="submitForm(form)" name="form" class="form-horizontal" role="form">
+		
+			<div class="tab-base tab-stacked-left">
+						
+				<!--Nav tabs-->
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a data-toggle="tab" data-target="#tab-when" aria-expanded="true">When</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-what" aria-expanded="false">What</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-where" aria-expanded="false">Where</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-why" aria-expanded="false">Why</a>
+					</li>
+				</ul>
+	
+				<!--Tabs Content-->
+				<div class="tab-content">
+					<div id="tab-when" class="tab-pane fade active in">											
+						<div class="form-group" ng-class="{ 'has-error' : form.startDate.$invalid && submitted }">
+							<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.startDate" name="startDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.startDate.$invalid && submitted" class="help-block">Start date is required.</p>
+							</div>				
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.endDate.$invalid && submitted }">
+							<label for="endDate" class="col-sm-2 control-label">End Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.endDate" name="endDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.endDate.$invalid && submitted" class="help-block">End date is required.</p>
+							</div>				
+						</div>												
+					</div>
+					<div id="tab-what" class="tab-pane fade">
+						<div class="form-group" ng-class="{ 'has-error' : form.description.$invalid && submitted }">
+							<label for="description" class="col-sm-2 control-label">Description</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.description" required name="description" type="text" placeholder="Holiday Season 2015" class="form-control">
+								<p ng-show="form.description.$invalid && submitted" class="help-block">Description is required.</p>
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.html.$invalid && submitted }">
+							<label for="html" class="col-sm-2 control-label">HTML</label>
+							<div class="col-sm-10">
+								<textarea ng-model="formData.item.html" required name="html" placeholder="<div style=''><span></span></div>" class="form-control" rows="8"></textarea>
+								<p ng-show="form.html.$invalid && submitted" class="help-block">HTML is required.</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="html" class="col-sm-2 control-label">styles</label>
+							<div class="col-sm-10">
+								<textarea ng-model="formData.item.styles" name="styles" placeholder="#container {background-color:red}" class="form-control" rows="8"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="scripts" class="col-sm-2 control-label">scripts</label>
+							<div class="col-sm-10">
+								<textarea ng-model="formData.item.scripts" name="scripts" placeholder="var alert = function() {}" class="form-control" rows="8"></textarea>
+							</div>
+						</div>	
+					</div>
+					<div id="tab-where" class="tab-pane fade">
+						<div class="form-group" ng-class="{ 'has-error' : form.platform.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Platforms</label>
+							<div class="col-sm-10">
+								<select required name="platform" ng-model="formData.environments" multiple class="form-control">
+									<option>Mobile</option>
+									<option>Android</option>
+									<option>IPhone</option>
+									<option>IPad</option>
+									<option>Desktop</option>
+								</select>
+								<p ng-show="form.platform.$invalid && submitted" class="help-block">Please select a platform.</p>
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.page.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Pages</label>
+							<div class="col-sm-10">
+								<select required name="page" ng-model="formData.item.pages" multiple class="form-control">
+									<option value="home">Home</option>
+									<option value="promo">Promotion</option>
+								</select>
+								<p ng-show="form.page.$invalid && submitted" class="help-block">Please select a page.</p>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="index" class="col-sm-2 control-label">Index</label>
+							<div class="col-sm-10">
+								<input type="text" ng-model="formData.item.index" name="index" placeholder="1" class="form-control">
+							</div>
+						</div>			
+					</div>
+					<div id="tab-why" class="tab-pane fade">
+						
+					</div>
+				</div>
+			</div>
+			<div class="form-group pull-right">
+				<div class="col-sm-12">
+					<input ng-show="formData.alertId" class="btn btn-default" ng-click="generageQuery(this)" type="button" value="Generate Query">
+					<button type="submit" class="btn btn-primary ng-binding">{{submitTitle || 'Create'}}</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!--End page content-->

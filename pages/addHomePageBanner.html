@@ -1,0 +1,245 @@
+<!--Page Title-->
+<div id="page-title">
+	<h1 class="page-header text-overflow">Add Image Banner</h1>
+</div>
+<!--End page title-->
+
+<!--Page content-->
+<div id="page-content">			
+	<div  ng-switch on="state">
+		<div ng-switch-when="submitted" class="alert alert-success" role="alert">
+			<strong>Well done!</strong> You successfully {{formData.alertId ? 'updated' : 'added'}} an page banner.
+		</div>
+		<form ng-switch-when="form" novalidate ng-submit="submitForm(form)" name="form" class="form-horizontal" role="form">
+		
+			<div class="tab-base tab-stacked-left">
+						
+				<!--Nav tabs-->
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a data-toggle="tab" data-target="#tab-when" aria-expanded="true">When</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-what" aria-expanded="false">What</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-where" aria-expanded="false">Where</a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" data-target="#tab-why" aria-expanded="false">Why</a>
+					</li>
+				</ul>
+	
+				<!--Tabs Content-->
+				<div class="tab-content">
+					<div id="tab-when" class="tab-pane fade active in">											
+						<div class="form-group" ng-class="{ 'has-error' : form.startDate.$invalid && submitted }">
+							<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.startDate" name="startDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.startDate.$invalid && submitted" class="help-block">Start date is required.</p>
+							</div>				
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.endDate.$invalid && submitted }">
+							<label for="endDate" class="col-sm-2 control-label">End Time</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.endDate" name="endDate" required type="datetime-local" class="form-control">
+								<p ng-show="form.endDate.$invalid && submitted" class="help-block">End date is required.</p>
+							</div>				
+						</div>												
+					</div>
+					<div id="tab-what" class="tab-pane fade">
+						<div class="form-group" ng-class="{ 'has-error' : form.description.$invalid && submitted }">
+							<label for="description" class="col-sm-2 control-label">Description</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.description" required name="description" type="text" placeholder="Pesach 2015" class="form-control">
+								<p ng-show="form.description.$invalid && submitted" class="help-block">Description is required.</p>
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.title.$invalid && submitted }">
+							<label for="title" class="col-sm-2 control-label">Title</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.title" required name="title" type="text" placeholder="Panasonic Live Event" class="form-control">
+								<p ng-show="form.title.$invalid && submitted" class="help-block">Title is required.</p>
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.imagePath.$invalid && submitted }">
+							<label for="imagePath" class="col-sm-2 control-label">Image Path</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.imagePath" required name="imagePath"  type="text" class="form-control">
+								<p ng-show="form.imagePath.$invalid && submitted" class="help-block">Image path is required.</p>
+							</div>
+						</div>		
+						<div class="form-group">
+							<label for="alt" class="col-sm-2 control-label">Image Alt</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.imageAlt" name="alt"  type="text" class="form-control">
+							</div>
+						</div>		
+						<div class="form-group" ng-repeat="variant in formData.item.variants">
+							<hr ng-show="variant != formData.item.variants[0]">
+							<ng-form name="innerForm"><!-- inner form so validation work for dynamic names -->
+								<label class="col-sm-2 control-label">Image Variant</label>
+								<div class="col-xs-10">
+									<div class="form-horizontal">		
+										<div class="form-group" ng-class="{ 'has-error' : innerForm.site.$invalid && submitted }">
+											<label for="Platform" class="col-sm-3 control-label">Sites</label>
+											<div class="col-sm-9">
+												<select required name="site" ng-model="variant.sites" multiple class="form-control">
+													<option>Regular</option>
+													<option>EDU</option>
+													<option>GSA</option>
+													<option>B2B</option>
+												</select>
+												<p ng-show="innerForm.site.$invalid && submitted" class="help-block">Please select a site.</p>
+											</div>
+										</div>
+										<div class="form-group"">
+											<label for="html" class="col-sm-3 control-label">
+											B2B list 
+											<span bp-info class="glyphicon glyphicon-info-sign" data-toggle="popover" title="Info" data-content="If b2b is selected in the sites input, you can specify a comma delimited list of b2b's."></span>	
+											</label>
+											<div class="col-sm-9">
+												<input ng-model="variant.b2blist" name="b2blist" type="text" placeholder="34,67,87" class="form-control">
+											</div>
+										</div>
+										<div class="form-group" ng-class="{ 'has-error' : innerForm.imageName.$invalid && submitted }">
+											<label for="imageName" class="col-sm-3 control-label">
+												Image Name 
+												<span bp-info class="glyphicon glyphicon-info-sign" data-toggle="popover" title="Info" data-content="Type the name of the images leaving out the dimensions (the dimenstion will be prepended automatically"></span>
+											</label>
+											<div class="col-sm-9">
+												<input ng-model="variant.imageName" required name="imageName" type="text" placeholder="_Fitness.jpg" class="form-control">
+												<p ng-show="innerForm.imageName.$invalid && submitted" class="help-block">Image name is required.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ng-form>
+						</div>		
+						<div class="form-group">
+					    	<div class="col-sm-offset-2 col-sm-10">
+					        	<div class="btn btn-default pull-right" ng-click="addVariant()">Add Variant</div>
+					    	</div>
+					    </div>
+						<div class="form-group">
+							<label for="lastname" class="col-sm-2 control-label">Link</label>
+							<div class="col-sm-10">
+								<input type="text" ng-model="formData.item.link" name="link" placeholder="http://www.bhphotovideo.com/find/panasonicGH4Event.jsp" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="coremetrics" class="col-sm-2 control-label">Coremetrics</label>
+							<div class="col-sm-10">
+								<input ng-model="formData.item.coremetrics" name="coremetrics"  type="text" class="form-control">
+							</div>
+						</div>	
+						<div class="form-group" ng-class="{ 'has-error' : form.linkType.$invalid && submitted }">
+							<label for="firstname" class="col-sm-2 control-label">Link Type</label>
+							<div class="col-sm-10">
+								<select ng-model="formData.item.linkType" required name="linkType" class="form-control">
+									<option>Please select a link type</option>
+									<option>listing</option>
+									<option>category</option>
+									<option>static</option>
+									<option>banner</option>
+								</select>
+								<p ng-show="form.linkType.$invalid && submitted" class="help-block">Link type is required.</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="categoryId" class="col-sm-2 control-label">Category Id</label>
+							<div class="col-sm-10">
+								<input type="text" ng-model="formData.item.categoryId" name="categoryId" placeholder="213456424" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="index" class="col-sm-2 control-label">Index</label>
+							<div class="col-sm-10">
+								<input type="text" ng-model="formData.item.index" name="index" placeholder="1" class="form-control">
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.imageSizes.$invalid && submitted }">
+							<label for="firstname" class="col-sm-2 control-label">Image Sizes</label>
+							<div class="col-sm-10">
+								<select ng-model="formData.item.imageSizes" required name="imageSizes" multiple class="form-control">
+									<option>400x70</option>
+									<option>400x100</option>
+									<option>800x70</option>
+									<option>800x100</option>
+									<option>800x200</option>
+									<option>800x140</option>
+									<option>1024x100</option>
+									<option>1024x200</option>
+									<option>2048x400</option>
+									<option>1600x140</option>
+									<option>1600x200</option>
+									<option>320x320</option>
+									<option>640x640</option>
+									<option>706x362</option>
+									<option>720x405</option>
+									<option>768x500</option>
+									<option>956x362</option>
+									<option>2048x200</option>
+									<option>1280x720</option>			
+									<option>1280x1280</option>
+									<option>1412x724</option>
+									<option>1912x724</option>
+									<option>1920x1080</option>
+									<option>1924x726</option>
+									<option>2560x1440</option>
+									
+								</select>
+								<p ng-show="form.imageSizes.$invalid && submitted" class="help-block">Image size is required.</p>
+							</div>
+						</div>		
+					</div>
+					<div id="tab-where" class="tab-pane fade">
+						<div class="form-group" ng-class="{ 'has-error' : form.platform.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Platforms</label>
+							<div class="col-sm-10">
+								<select required name="platform" ng-model="formData.environments" multiple class="form-control">
+									<option>Mobile</option>
+									<option>Android</option>
+									<option>IPhone</option>
+									<option>IPad</option>
+									<option>Desktop</option>
+								</select>
+								<p ng-show="form.platform.$invalid && submitted" class="help-block">Please select a platform.</p>
+							</div>
+						</div>
+						<div class="form-group" ng-class="{ 'has-error' : form.page.$invalid && submitted }">
+							<label for="Platform" class="col-sm-2 control-label">Pages</label>
+							<div class="col-sm-10">
+								<select required name="page" ng-model="formData.item.pages" multiple class="form-control">
+									<option value="home">Home</option>
+									<option value="promo">Promotion</option>
+								</select>
+								<p ng-show="form.page.$invalid && submitted" class="help-block">Please select a page.</p>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="country" class="col-sm-2 control-label">Countries</label>
+							<div class="col-sm-10">
+								<select name="country" ng-model="formData.item.countries" multiple class="form-control">
+									<option>AU</option>
+									<option>CA</option>
+								</select>
+							</div>
+						</div>			
+					</div>
+					<div id="tab-why" class="tab-pane fade">
+						<h4 class="text-thin">Cuz I said so ;)</h4>
+					</div>
+				</div>
+			</div>
+			<div class="form-group pull-right">
+				<div class="col-sm-12">
+					<input ng-show="formData.alertId" class="btn btn-default" ng-click="generageQuery(this)" type="button" value="Generate Query">
+					<button type="submit" class="btn btn-primary ng-binding">{{submitTitle || 'Create'}}</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!--End page content-->

@@ -1,0 +1,81 @@
+<!--Page Title-->
+<div id="page-title">
+	<h1 class="page-header text-overflow">{{formData.alertId ? 'Update' : 'Add'}} Note</h1>
+</div>
+<!--End page title-->
+
+<!--Page content-->
+<div id="page-content">			
+	<div class="panel">
+		<div class="panel-heading">
+			<h3 class="panel-title">Groups</h3>
+		</div>
+
+		<div class="panel-body">
+			<table class="table table-hover table-vcenter">
+				<thead>
+					<tr>
+						<th>Edit</th>
+						<th>name</th>	
+						<th>Start Date</th>
+						<th>End Date</th>						
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="group in groups">
+						<td><a ng-href="#groups/{{group.groupId}}"><span class="glyphicon glyphicon-edit"></span></a></td>	
+						<td>{{group.item.name}}</td>	
+						<td>{{ group.startDate | date:'MM/dd/yyyy h:mm a'}}</td>
+						<td>{{ group.endDate | date:'yyyy-MM-ddTHH:mm'}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div class="panel">
+		<div class="panel-heading">
+			<h3 class="panel-title">Add new Group</h3>
+		</div>
+
+		<div class="panel-body">
+			<form novalidate ng-submit="submitForm(form)" name="form" class="form-horizontal" role="form">
+				<div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && form.$submitted }">
+					<label for="description" class="col-sm-2 control-label">Group Name</label>
+					<div class="col-sm-10">
+						<input ng-model="formData.item.name" required name="name" type="text" placeholder="Pesach 2015" class="form-control">
+						<p ng-show="form.name.$invalid && form.$submitted" class="help-block">Group name is required.</p>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error' : form.startDate.$invalid && form.$submitted }">
+					<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+					<div class="col-sm-10">
+						<input ng-model="formData.startDate" name="startDate" required type="datetime-local" class="form-control">
+						<p ng-show="form.startDate.$invalid && form.$submitted" class="help-block">Start date is required.</p>
+					</div>				
+				</div>
+				<div class="form-group" ng-class="{ 'has-error' : form.endDate.$invalid && form.$submitted }">
+					<label for="endDate" class="col-sm-2 control-label">End Time</label>
+					<div class="col-sm-10">
+						<input ng-model="formData.endDate" name="endDate" required type="datetime-local" class="form-control">
+						<p ng-show="form.endDate.$invalid && form.$submitted" class="help-block">End date is required.</p>
+					</div>				
+				</div>		
+				<div class="form-group">
+				 	<label for="html" class="col-sm-2 control-label">Show Calender</label>
+			        <div class="col-sm-10 ">	
+			        	<div class="checkbox">	         
+			              	<label><input type="checkbox" ng-model="formData.item.caladerWidget">Show Calender</label>
+			            </div>
+			        </div>
+			    </div>
+				<div class="form-group pull-right">
+					<div class="col-sm-12">
+						<button type="submit" class="btn btn-primary ng-binding">{{submitTitle || 'Create'}}</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!--End page content-->

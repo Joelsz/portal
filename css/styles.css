@@ -1,0 +1,68 @@
+@-webkit-keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.ng-enter 		{  
+  -webkit-animation:  fadeIn .7s; /* Safari 4+ */
+  -moz-animation:    fadeIn .7s; /* Fx 5+ */
+  -o-animation:      fadeIn .7s; /* Opera 12+ */
+  animation:         fadeIn .7s; /* IE 10+, Fx 29+ */
+}
+
+.navbar-brand {
+	overflow: visible;	
+}
+
+#io_logo
+{
+    -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+    width: 60px;
+    height: 60px;
+    background-color: #5aaddb;
+    font-family: 'Open Sans', sans-serif;
+    font-size:47px;
+    line-height:55px;
+    font-weight: bold;
+    color:#fff;
+    padding: 8px;
+    margin: 10px;
+}
+
+#mobile_labs_logo {
+	position: absolute;
+	bottom: 30px;
+	left: 36px;	
+}
+
+/* start bootstrap overrides */
+input[type=datetime-local] {
+	line-height: 16px;
+}
+/* end bootstrap overrides */
+
+/* start nifty overrides */
+#mainnav-menu-wrap{
+	margin-top: 0px;
+}
+/* end nifty overrides */
+
+.menu-title {
+	font-size: 14px;
+}
+
+/* start preview dialog customs */
+.preview-dialog .modal-body {
+	font-size: 14px;
+}
+
+.preview-dialog .modal-body h1 {
+	font-size: 18px;
+}
+
+.preview-dialog .modal-body h2 {
+	font-size: 15px;
+}
+/* end preview dialog customs */

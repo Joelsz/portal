@@ -1,0 +1,66 @@
+<div class="content-header">
+	<h1>
+		<a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-align-justify"></i></a>
+		{{formData.alertId ? 'Update' : 'Add'}} Doodle :)
+	</h1>
+</div>
+<!-- Keep all page content within the page-content inset div! -->
+<div class="page-content inset">
+	<div class="row">
+		<div class="col-md-12">
+			<div ng-switch on="state">
+				<div ng-switch-when="submitted" class="alert alert-success" role="alert">
+					<strong>Well done!</strong> You successfully {{formData.alertId ? 'updated' : 'added'}} a doodle :).
+				</div>
+				<form ng-switch-when="form" novalidate ng-submit="submitForm(form)" name="form" class="form-horizontal" role="form">
+					<div class="form-group" ng-class="{ 'has-error' : form.platform.$invalid && submitted }">
+						<label for="Platform" class="col-sm-2 control-label">Platforms</label>
+						<div class="col-sm-10">
+							<select required name="platform"  multiple class="form-control" ng-model="formData.environments">
+								<option>Mobile</option>
+								<option>Android</option>
+								<option>IPhone</option>
+								<option>IPad</option>
+								<option>Desktop</option>
+							</select>
+							<p ng-show="form.platform.$invalid && submitted" class="help-block">Please select a platform.</p>
+						</div>
+					</div>
+					<div class="form-group" ng-class="{ 'has-error' : form.startDate.$invalid && submitted }">
+						<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+						<div class="col-sm-10">
+							<input ng-model="formData.startDate" name="startDate" required type="datetime-local" class="form-control">
+							<p ng-show="form.startDate.$invalid && submitted" class="help-block">Start date is required.</p>
+						</div>				
+					</div>
+					<div class="form-group" ng-class="{ 'has-error' : form.endDate.$invalid && submitted }">
+						<label for="endDate" class="col-sm-2 control-label">End Time</label>
+						<div class="col-sm-10">
+							<input ng-model="formData.endDate" name="endDate" required type="datetime-local" class="form-control">
+							<p ng-show="form.endDate.$invalid && submitted" class="help-block">End date is required.</p>
+						</div>				
+					</div>
+					<div class="form-group" ng-class="{ 'has-error' : form.jsfile.$invalid && submitted }">
+						<label for="html" class="col-sm-2 control-label">JS File</label>
+						<div class="col-sm-10">
+							<input ng-model="formData.item.jsfile" required name="condensedNote" type="text" placeholder="slide1" class="form-control">
+							<p ng-show="form.jsfile.$invalid && submitted" class="help-block">JS File is required.</p>
+						</div>
+					</div>
+					<div class="form-group" ng-class="{ 'has-error' : form.jsfile.$invalid && submitted }">
+						<label for="html" class="col-sm-2 control-label">Variation Classes</label>
+						<div class="col-sm-10">
+							<input ng-model="formData.item.variation" required name="condensedNote" type="text" placeholder="photography,computers" class="form-control">
+							<p ng-show="form.variation.$invalid && submitted" class="help-block">Variation Classes is required.</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-default">{{submitTitle || 'Create'}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
