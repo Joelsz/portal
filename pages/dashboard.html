@@ -16,30 +16,15 @@
 			<div class="pad-btm form-inline">
 				<div class="row">
 					<div class="col-sm-6 table-toolbar-left">
-						<div class="col-sm-5">
-							<label class="control-label">Filter:</label>
-							<div class="btn-group bootstrap-select">
-								<button type="button" class="btn dropdown-toggle selectpicker btn-default" data-toggle="dropdown" title="HTML" aria-expanded="false">
-									<span class="filter-option pull-left">{{selectedEnvironment || 'Environment'}}</span>&nbsp;<span class="caret"></span>
-								</button>
-								<div class="dropdown-menu open" style="max-height: 548px; overflow: hidden; min-height: 84px;">
-									<ul class="dropdown-menu inner selectpicker" role="menu" style="max-height: 546px; overflow-y: auto; min-height: 82px;">
-										<li data-original-index="3" ng-repeat="environment in environments" ng-click="filterEnvironment(environment.value)"><a tabindex="0" class="" data-normalized-text="Javascript"><span class="text">{{environment.name}}</span><span class="fa fa-check check-mark"></span></a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-5">
-							<label class="control-label">Sort By:</label>
-							<div class="btn-group bootstrap-select">
-								<button type="button" class="btn dropdown-toggle selectpicker btn-default" data-toggle="dropdown" title="HTML" aria-expanded="false">
-									<span class="filter-option pull-left">{{selectedSort.name || 'Default'}}</span>&nbsp;<span class="caret"></span>
-								</button>
-								<div class="dropdown-menu open" style="max-height: 548px; overflow: hidden;">
-									<ul class="dropdown-menu inner selectpicker" role="menu" style="max-height: 546px;">
-										<li data-original-index="2" ng-repeat="sortType in sortTypes" ng-click="sortAlerts(sortType)"><a tabindex="0" class="" data-normalized-text="Javascript"><span class="text">{{sortType.name}}</span><span class="fa fa-check check-mark"></span></a></li>
-									</ul>
-								</div>
+						<label class="control-label">Filter:</label>
+						<div class="btn-group bootstrap-select">
+							<button type="button" class="btn dropdown-toggle selectpicker btn-default" data-toggle="dropdown" title="HTML" aria-expanded="false">
+								<span class="filter-option pull-left">{{selectedEnvironment || 'Environment'}}</span>&nbsp;<span class="caret"></span>
+							</button>
+							<div class="dropdown-menu open" style="max-height: 548px; overflow: hidden; min-height: 84px;">
+								<ul class="dropdown-menu inner selectpicker" role="menu" style="max-height: 546px; overflow-y: auto; min-height: 82px;">
+									<li data-original-index="3" ng-repeat="environment in environments" ng-click="filterEnvironment(environment.value)"><a tabindex="0" class="" data-normalized-text="Javascript"><span class="text">{{environment.name}}</span><span class="fa fa-check check-mark"></span></a></li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -54,21 +39,17 @@
 			<table class="table table-hover table-vcenter">
 				<thead>
 					<tr>
-						<th></th>
-						<th>Edit</th>
-						<th>Remove</th>
-						<th>Type</th>
-						<th>Description</th>
-						<th>Start Date</th>
-						<th>End Date</th>
-						<th>Environments</th>						
+						<th ng-repeat="th in tableHeader" ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+							<a href ng-click="sortAlerts(th.value)">{{ th.name }}<span ng-show="th.value != '' && (selectedSort == th.value || hover)" class="glyphicon glyphicon-chevron-{{ selectedSort == th.value && sortReverse ? 'up' : 'down' }} pull-right"></span></a>
+						</th>			
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="alert in alerts | filter:searchText | filter:{environments:selectedEnvironment} | orderBy:selectedSort.value">
+					<tr ng-repeat="alert in alerts | filter:searchText | filter:{environments:selectedEnvironment} | orderBy:selectedSort:sortReverse">
 						<td class="text-center"><span class="icon-wrap icon-wrap-sm icon-circle {{getAlertTypeInfo(alert.type).theme.colorClass}}"><i class="glyphicon glyphicon-{{getAlertTypeInfo(alert.type).theme.iconClass}}"></i></span></td>
 						<td><a ng-href="#{{getAlertTypeInfo(alert.type).href}}/{{alert.alertId}}"><span class="glyphicon glyphicon-edit"></span></a></td>
 						<td ng-click="deleteAlert(alert)"><a href><span class="glyphicon glyphicon-remove"></span></a></td>
+						<td ng-click="cloneAlert(alert)"><a href="#{{getAlertTypeInfo(alert.type).href}}/{{alert.alertId}}/clone"><span class="glyphicon glyphicon-share"></span></a></td>
 						<td>{{alert.type}}</td>
 						<td>{{alert.item.description}}</td>
 						<td>{{ getDateObj(alert.startDate) | date:'MMM dd yyyy h:mm a' }}</td>

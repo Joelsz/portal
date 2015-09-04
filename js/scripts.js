@@ -1,36 +1,123 @@
-var bannerPortal = angular.module('bannerPortal', [ 'ngRoute', 'ngResource', 'ngAnimate', 'ngSanitize', 'ui.bootstrap']);
-	var path = '/FrameWork/IO/pages/';
-	bannerPortal.config(['$routeProvider',
+var IO = angular.module('IO', [ 'ngRoute', 'ngResource', 'ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+	var path = '/portal/pages/';
+	IO.config(['$routeProvider',
 	function($routeProvider) {
 	  $routeProvider.
-	    when('/addHomePageBanner/:id?', {
+	    when('/', {
+	      templateUrl: path + 'portalHome.html',
+	      controller: 'PortalHomeController'
+	  }).when('/addHomePageBanner/:id?/:clone?', {
 	      templateUrl: path + 'addHomePageBanner.html',
 	      controller: 'AddImageBannerController'
-	  }).when('/addHTMLBanner/:id?', {
+	  }).when('/addHTMLBanner/:id?/:clone?', {
 	      templateUrl: path + '//addHTMLBanner.html',
 	      controller: 'AddHTMLBannerController'
-	  }).when('/', {
+	  }).when('/dashboard', {
 	      templateUrl: path + 'dashboard.html',
 	      controller: 'DashboardController'
-	  }).when('/addNote/:id?', {
+	  }).when('/addNote/:id?/:clone?', {
 	      templateUrl: path + 'addNote.html',
 	      controller: 'AddNoteController'
-	  }).when('/addCheckoutAgreement/:id?', {
+	  }).when('/addCheckoutAgreement/:id?/:clone?', {
 	      templateUrl: path + 'addCheckoutAgreement.html',
 	      controller: 'AddCheckoutAgreementController'
-	  }).when('/addDepartmentClosedAlert/:id?', {
+	  }).when('/addDepartmentClosedAlert/:id?/:clone?', {
 	      templateUrl: path + 'addDepartmentClosedAlert.html',
 	      controller: 'AddDepartmentClosedAlertController'
-	  }).when('/addDoodle/:id?', {
+	  }).when('/addDoodle/:id?/:clone?', {
 	      templateUrl: path + 'addDoodle.html',
 	      controller: 'AddDoodleController'
 	  }).when('/groups/:id?', {
 	      templateUrl: path + 'groups.html',
 	      controller: 'GroupsCountroller'
+	  }).when('/giftCards', {
+	      templateUrl: path + 'giftCards.html',
+	      controller: 'GiftCardsCountroller'
 	  });
 	}]);		
+
+IO.controller('PortalHomeController', function($scope){
+
+	var day_data = [
+		{"elapsed": "2013 - 01", "value": 24, b:2},
+		{"elapsed": "2013 - 02", "value": 34, b:22},
+		{"elapsed": "2013 - 03", "value": 33, b:7},
+		{"elapsed": "2013 - 04", "value": 22, b:6},
+		{"elapsed": "2013 - 05", "value": 28, b:17},
+		{"elapsed": "2013 - 06", "value": 60, b:15},
+		{"elapsed": "2013 - 07", "value": 60, b:17},
+		{"elapsed": "2013 - 08", "value": 70, b:7},
+		{"elapsed": "2013 - 09", "value": 67, b:18},
+		{"elapsed": "2013 - 10", "value": 86, b: 18},
+		{"elapsed": "2013 - 11", "value": 86, b: 18},
+		{"elapsed": "2013 - 12", "value": 113, b: 29},
+		{"elapsed": "2014 - 01", "value": 130, b: 23},
+		{"elapsed": "2014 - 02", "value": 114, b:10},
+		{"elapsed": "2014 - 03", "value": 80, b:22},
+		{"elapsed": "2014 - 04", "value": 109, b:7},
+		{"elapsed": "2014 - 05", "value": 100, b:6},
+		{"elapsed": "2014 - 06", "value": 105, b:17},
+		{"elapsed": "2014 - 07", "value": 110, b:15},
+		{"elapsed": "2014 - 08", "value": 102, b:17},
+		{"elapsed": "2014 - 09", "value": 107, b:7},
+		{"elapsed": "2014 - 10", "value": 60, b:18},
+		{"elapsed": "2014 - 11", "value": 67, b: 18},
+		{"elapsed": "2014 - 12", "value": 76, b: 18},
+		{"elapsed": "2015 - 01", "value": 73, b: 29},
+		{"elapsed": "2015 - 02", "value": 94, b: 13},
+		{"elapsed": "2015 - 03", "value": 79, b: 24}
+	];
+
+	var chart = Morris.Area({
+		element: 'morris-chart-network',
+		data: day_data,
+		axes:false,
+		xkey: 'elapsed',
+		ykeys: ['value', 'b'],
+		labels: ['Download Speed', 'Upload Speed'],
+		yLabelFormat :function (y) { return y.toString() + ' Mb/s'; },
+		gridEnabled: false,
+		gridLineColor: 'transparent',
+		lineColors: ['#8eb5e3','#1b72bc'],
+		lineWidth:0,
+		pointSize:0,
+		pointFillColors:['#3e80bd'],
+		pointStrokeColors:'#3e80bd',
+		fillOpacity:.7,
+		gridTextColor:'#999',
+		parseTime: false,
+		resize:true,
+		behaveLikeLine : true,
+		hideHover: 'auto'
+	});
+
+
+
+
+	// Services chart ( Morris Donut Chart )
+	// =================================================================
+	// Require MorrisJS Chart
+	// -----------------------------------------------------------------
+	// http://morrisjs.github.io/morris.js/
+	// =================================================================
+	Morris.Donut({
+		element: 'demo-morris-donut',
+		data: [
+			{label: "Supports", value: 12},
+			{label: "Sales", value: 30},
+			{label: "Comments", value: 20}
+		],
+		colors: [
+			'#c686be',
+			'#986291',
+			'#ab6fa3'
+		],
+		resize:true
+	});
+
+});
 	
-bannerPortal.controller('AppController', function($scope, $modal, Groups) {
+IO.controller('AppController', function($scope, $modal, Groups) {
 		
 	$scope.environments = [
 	      {name: 'All', value: ''},
@@ -71,7 +158,7 @@ bannerPortal.controller('AppController', function($scope, $modal, Groups) {
 	$scope.fetchGroups();
 });
 	
-bannerPortal.controller('AddImageBannerController', function($scope, $routeParams, Banner, $filter) {	
+IO.controller('AddImageBannerController', function($scope, $routeParams, Banner, $filter) {	
 	$scope.formData = {};
 	$scope.formData.type = 'homebanner';
 	$scope.formData.item = {};
@@ -84,7 +171,10 @@ bannerPortal.controller('AddImageBannerController', function($scope, $routeParam
 	
 	if($routeParams.id) {
 		Banner.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Banner';
+			if($routeParams.clone)
+				delete response.alertId;
+			if(response.alertId)
+				$scope.submitTitle = 'Update Banner';
 			$scope.formData = response;	
 			
 			//support older versions
@@ -134,16 +224,20 @@ bannerPortal.controller('AddImageBannerController', function($scope, $routeParam
 	};    
 });
 
-bannerPortal.controller('AddHTMLBannerController', function($scope, $routeParams, Banner, $filter) {	
+IO.controller('AddHTMLBannerController', function($scope, $routeParams, Banner, $filter) {	
 	$scope.formData = {};
 	$scope.formData.type = 'HTMLBanner';
 	$scope.formData.item = {};
+	$scope.formData.item.variants = [{}];
 	
 	$scope.submitted = false;
 
 	if($routeParams.id) {
 		Banner.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Banner';
+			if($routeParams.clone)
+				delete response.alertId;
+			if(response.alertId)
+				$scope.submitTitle = 'Update Banner';
 			$scope.formData = response;	
 			$scope.formData.startDate = new Date(response.startDate);
 			$scope.formData.endDate = new Date(response.endDate);
@@ -151,6 +245,12 @@ bannerPortal.controller('AddHTMLBannerController', function($scope, $routeParams
 	}	
 	
 	$scope.state = 'form';
+	
+	$scope.addVariant = function() {
+		$scope.formData.item.variants.push({});
+		return false;
+	}
+	
 	$scope.submitForm = function (form) {
 		$scope.submitted = true;
 		if(form.$valid) {
@@ -181,7 +281,8 @@ bannerPortal.controller('AddHTMLBannerController', function($scope, $routeParams
 	};    
 });
 
-bannerPortal.controller('AddNoteController', function($scope, $routeParams, Banner, $filter, $modal) {
+IO.controller('AddNoteController', function($scope, $routeParams, Banner, $filter, $modal) {
+	
 	$scope.formData = {};
 	$scope.formData.type = 'note';
 	$scope.formData.item = {};
@@ -193,10 +294,13 @@ bannerPortal.controller('AddNoteController', function($scope, $routeParams, Bann
 	
 	if($routeParams.id) {
 		Banner.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Note';
+			if($routeParams.clone)
+				delete response.alertId;
+			if(response.alertId)
+				$scope.submitTitle = 'Update Note';
 			$scope.formData = response;	
-			$scope.formData.startDate = new Date(response.startDate);
-			$scope.formData.endDate = new Date(response.endDate);
+			$scope.formData.startDate = new Date(response.startDate.replace(/-/g, '/'));
+			$scope.formData.endDate = new Date(response.endDate.replace(/-/g, '/'));
 			
 			showWidgets();
 		});
@@ -243,11 +347,11 @@ bannerPortal.controller('AddNoteController', function($scope, $routeParams, Bann
 			$scope.submitTitle = 'Updating...';
 			//if update
 			if($scope.formData.alertId) {
-				Banner.update($.param({'json': JSON.stringify($scope.formData)}), function() {
+				Banner.update($.param({'json': angular.toJson($scope.formData)}), function() {
 					$scope.state = 'submitted';
 				});
 			} else {
-				Banner.save($.param({'json': JSON.stringify($scope.formData)}), function() {
+				Banner.save($.param({'json': angular.toJson($scope.formData)}), function() {
 					$scope.state = 'submitted';
 				});
 			}
@@ -279,7 +383,7 @@ bannerPortal.controller('AddNoteController', function($scope, $routeParams, Bann
 	}
 });
 
-bannerPortal.controller('AddCheckoutAgreementController', function($scope, $routeParams, Banner, $filter, $modal) {
+IO.controller('AddCheckoutAgreementController', function($scope, $routeParams, Banner, $filter, $modal) {
 	$scope.formData = {};
 	$scope.formData.type = 'checkoutAgreement';
 	$scope.formData.item = {};
@@ -288,7 +392,10 @@ bannerPortal.controller('AddCheckoutAgreementController', function($scope, $rout
 	
 	if($routeParams.id) {
 		Banner.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Checkout Agreement';
+			if($routeParams.clone)
+				delete response.alertId;
+			if(response.alertId)
+				$scope.submitTitle = 'Update Checkout Agreement';
 			$scope.formData = response;	
 			$scope.formData.startDate = new Date(response.startDate);
 			$scope.formData.endDate = new Date(response.endDate);
@@ -324,16 +431,28 @@ bannerPortal.controller('AddCheckoutAgreementController', function($scope, $rout
 	}
 });
 
-bannerPortal.controller('AddDepartmentClosedAlertController', function($scope, $routeParams, Banner, $filter, $modal) {
+IO.controller('AddDepartmentClosedAlertController', function($scope, $routeParams, Banner, $filter, $modal) {
+	
 	$scope.formData = {};
 	$scope.formData.type = 'departmentClosed';
 	$scope.formData.item = {};
+	$scope.formData.item.departments = [{}];
 	
 	$scope.submitted = false;
 	
+	$scope.addDept = function(){
+		$scope.formData.item.departments.push({});	
+	}
+	$scope.removeDept = function(i){
+		$scope.formData.item.departments.splice(i, 1);
+	}
+	
 	if($routeParams.id) {
 		Banner.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Department Closed Alert';
+			if($routeParams.clone)
+				delete response.alertId;
+			if(response.alertId)
+				$scope.submitTitle = 'Update Department Closed Alert';
 			$scope.formData = response;	
 			$scope.formData.startDate = new Date(response.startDate);
 			$scope.formData.endDate = new Date(response.endDate);
@@ -341,8 +460,23 @@ bannerPortal.controller('AddDepartmentClosedAlertController', function($scope, $
 	}	
 	
 	$scope.state = 'form';
+	$scope.duplicateDept = false;
+	
 	$scope.submitForm = function (form) {
 		$scope.submitted = true;
+		
+		var values = $.map($scope.formData.item.departments, function(o) { return o["department"]; })
+		$.each(values, function(i, val){
+			var vals = values.slice();
+			vals.splice(i,1);
+			$scope.duplicateDept = (vals.indexOf(val) != -1);
+			if(vals.indexOf(val) != -1)
+				return false;
+		});
+		
+		if($scope.duplicateDept)
+			return;
+		
 		if(form.$valid) {
 			$scope.formData.startDate = $filter('date')($scope.formData.startDate, 'yyyy-MM-ddTHH:mm');
 			$scope.formData.endDate = $filter('date')($scope.formData.endDate, 'yyyy-MM-ddTHH:mm');
@@ -369,7 +503,7 @@ bannerPortal.controller('AddDepartmentClosedAlertController', function($scope, $
 	}
 });
 
-bannerPortal.controller('AddDoodleController', function($scope, $routeParams, Banner, $filter) {
+IO.controller('AddDoodleController', function($scope, $routeParams, Banner, $filter) {
 	$scope.formData = {};
 	$scope.formData.type = 'doodle';
 	$scope.formData.item = {};
@@ -378,7 +512,10 @@ bannerPortal.controller('AddDoodleController', function($scope, $routeParams, Ba
 	
 	if($routeParams.id) {
 		Banner.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Doodle :)';
+			if($routeParams.clone)
+				delete response.alertId;
+			if(response.alertId)
+				$scope.submitTitle = 'Update Doodle :)';
 			$scope.formData = response;	
 			$scope.formData.startDate = new Date(response.startDate);
 			$scope.formData.endDate = new Date(response.endDate);
@@ -404,7 +541,7 @@ bannerPortal.controller('AddDoodleController', function($scope, $routeParams, Ba
 	};    
 });
 
-bannerPortal.controller('DashboardController', function($scope, Alerts, $filter, $modal) {	
+IO.controller('DashboardController', function($scope, Alerts, $filter, $modal) {	
 	Alerts.get(function(response) {
 		 $scope.alerts = response.data;
 	});
@@ -413,35 +550,44 @@ bannerPortal.controller('DashboardController', function($scope, Alerts, $filter,
 		return new Date(string);
 	}
 	
-	$scope.sortTypes = [
-	      {name: 'Default', value: ''},
+	$scope.tableHeader = [
+	      {name: '', value: ''},
+	      {name: 'Edit', value: ''},
+	      {name: 'Remove', value: ''},
+	      {name: 'Clone', value: ''},
 	      {name: 'Type', value: 'type'},
 	      {name: 'Description', value: 'item.description'},
 	      {name: 'Start Date', value: 'startDate'},
+	      {name: 'End Date', value: 'endDate'},
 	      {name: 'Environments', value: 'environments'}
 	];
 	
-	var setSelectedEnvironment = function(value){
+	$scope.filterEnvironment = function(value) {
+		$scope.selectedEnvironment = value;
 		if(localStorage){
 			localStorage.selectedEnvironment = value;
 		}
 	}
 	
-	var filterEnvironment = function(value) {
-		$scope.selectedEnvironment = value;
+	$scope.sortReverse = false;
+	
+	$scope.sortAlerts = function(value){
+		
+		if($scope.selectedSort == value)
+			$scope.sortReverse = !$scope.sortReverse;
+		
+		$scope.selectedSort = value;
+		if(localStorage){
+			localStorage.selectedSort = value;
+		}
 	}
 	
-	if(localStorage && localStorage.selectedEnvironment){
-		filterEnvironment(localStorage.selectedEnvironment);
-	}
+	if(localStorage){
+		if(localStorage.selectedEnvironment)
+			$scope.filterEnvironment(localStorage.selectedEnvironment);
 	
-	$scope.filterEnvironment = function(value){
-		filterEnvironment(value);
-		setSelectedEnvironment(value);
-	}
-	
-	$scope.sortAlerts = function(sort){
-		$scope.selectedSort = sort;
+		if(localStorage.selectedSort)
+			$scope.sortAlerts(localStorage.selectedSort);
 	}
 	
 	$scope.deleteAlert = function(alert) {
@@ -462,63 +608,100 @@ bannerPortal.controller('DashboardController', function($scope, Alerts, $filter,
 	}
 });
 
-bannerPortal.controller('GroupsCountroller', function($scope, Groups, Group, $routeParams, $filter) {	
+IO.controller('GroupsCountroller', function($scope, Groups, Group, $routeParams, $filter, $location) {
 
 	var setFormData = function() {
 		$scope.formData = {};
 		$scope.formData.item = {};
+		$scope.formData.item.subgroups = [{}];
 	}
 	
 	setFormData();
 	
 	if($routeParams.id) {
 		Group.get({id: $routeParams.id}, function(response) {
-			$scope.submitTitle = 'Update Banner';
-			$scope.formData = response;	
+			var formData = response;
+			formData.item = response.item;
+			$scope.submitTitle = 'Update Group';
 				
-			$scope.formData.startDate = new Date(response.startDate);
-			$scope.formData.endDate = new Date(response.endDate);
+			formData.startDate = new Date(response.startDate.replace(/-/g, '/'));
+			formData.endDate = new Date(response.endDate.replace(/-/g, '/'));
+			
+			$.each(formData.item.subgroups, function(i, sub){
+				formData.item.subgroups[i].startDate = new Date(formData.item.subgroups[i].startDate.replace(/-/g, '/'));
+				formData.item.subgroups[i].endDate = new Date(formData.item.subgroups[i].endDate.replace(/-/g, '/'));
+			});
+			
+			$scope.formData = formData;
 		});
 	}
+	
+	$scope.getDateTimeString = function(date){
+		return $filter('date')(date, 'yyyy-MM-ddTHH:mm:ss');
+	};
+	
+	$scope.addSubgroup = function(){
+		$scope.formData.item.subgroups.push({});
+		return false;
+	};
+	
+	$scope.removeSubgroup = function(i){
+		$scope.formData.item.subgroups.splice(i,1);
+	};
 	
 	$scope.submitForm = function (form) {
 		$scope.submitted = true;
 		if(form.$valid) {
 			var item = {};
+			
+			$.each($scope.formData.item.subgroups, function(i, sub){
+				sub.startDate = $filter('date')(new Date(sub.startDate), 'yyyy-MM-dd');
+				sub.endDate = $filter('date')(new Date(sub.endDate), 'yyyy-MM-dd');
+			});
+			
 			$.each($scope.formData.item, function(key, value) {
 			    if(value) {
 			    	item[key] = value;
 			    }
 			});		
+			
 			$scope.formData.item = item;
 			
-			$scope.formData.startDate = $filter('date')($scope.formData.startDate, 'yyyy-MM-ddTHH:mm');
-			$scope.formData.endDate = $filter('date')($scope.formData.endDate, 'yyyy-MM-ddTHH:mm');
+			$scope.formData.startDate = $filter('date')(new Date($scope.formData.startDate), 'yyyy-MM-ddTHH:mm');
+			$scope.formData.endDate = $filter('date')(new Date($scope.formData.endDate), 'yyyy-MM-ddTHH:mm');
 			
 			$scope.submitTitle = 'Updating...';
 			//if update
 			if($scope.formData.groupId) {		
-				Group.update($.param({'json': JSON.stringify($scope.formData)}), function() {
+				Group.update($.param({'json': angular.toJson($scope.formData)}), function() {
 					$scope.state = 'submitted';
 					$scope.submitTitle = '';
 					$scope.fetchGroups();
 					setFormData();
 					$scope.form.$setPristine();
+					$location.url('/groups');
 				});
 			} else {
-				Group.save($.param({'json': JSON.stringify($scope.formData)}), function() {
+				Group.save($.param({'json': angular.toJson($scope.formData)}), function() {
 					$scope.state = '';
 					$scope.submitTitle = '';
 					$scope.fetchGroups();
 					setFormData();
 					$scope.form.$setPristine();
+					$location.url('/groups');
 				});
-			}	
+			}
 		}
 	};
 });
 
-bannerPortal.factory('Banner', function($resource) {
+IO.controller('GiftCardsCountroller', function($scope, SQA) {	
+	SQA.query({'call': 'getActiveGiftCards'}, function(data) {
+		$scope.cards = data;
+	});
+});
+
+IO.factory('Banner', function($resource) {
     return $resource('/bnh/controller/home?O=home&Q=json:action', {}, {
         save: {
             method: 'POST',
@@ -537,7 +720,7 @@ bannerPortal.factory('Banner', function($resource) {
     });
 });
 
-bannerPortal.factory('Group', function($resource) {
+IO.factory('Group', function($resource) {
     return $resource('/bnh/controller/home?O=home&Q=json:action', {}, {
         save: {
             method: 'POST',
@@ -556,15 +739,31 @@ bannerPortal.factory('Group', function($resource) {
     });
 });
 
-bannerPortal.factory('Alerts', function($resource) {
+IO.factory('Alerts', function($resource) {
 	return $resource('/bnh/controller/home?O=home&A=GetAlerts&Q=json&filter=false');
 });
 
-bannerPortal.factory('Groups', function($resource) {
+IO.factory('Groups', function($resource) {
 	return $resource('/bnh/controller/home?O=home&A=GetGroups&Q=json');
 });
 
-bannerPortal.directive('bpInfo', function(){
+IO.factory('SQA', function($resource) {
+    return $resource('/bnh/controller/home?O=home&Q=json&A=DoSQACall', {}, {
+        save: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        },
+        update: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        },
+        get: {
+            method: 'GET',
+        }
+    });
+});
+
+IO.directive('bpInfo', function(){
 	return {
 		restrict: 'A',
 		link: function(scope, element){
@@ -587,3 +786,7 @@ var modalInstance = function ($scope, $modalInstance) {
     $modalInstance.dismiss('cancel');
   };
 };
+
+var getDateObj = function(string){
+	return new Date(string);
+}

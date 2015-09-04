@@ -49,17 +49,46 @@
 						</div>												
 					</div>
 					<div id="tab-what" class="tab-pane fade">
-						<div class="form-group" ng-class="{ 'has-error' : form.department.$invalid && submitted }">
-							<label for="Platform" class="col-sm-2 control-label">Platforms</label>
-							<div class="col-sm-10">
-								<select required name="department"  multiple class="form-control" ng-model="formData.item.department">
-									<option value="sales">Sales</option>
-									<option value="customer service">Customer Service</option>
-									<option value="chat">Chat</option>
-								</select>
-								<p ng-show="form.department.$invalid && submitted" class="help-block">Please select a department.</p>
-							</div>
+						<div class="form-group" ng-repeat="dept in formData.item.departments">
+							<hr ng-show="dept != formData.item.departments[0]">
+							<ng-form name="innerForm"><!-- inner form so validation work for dynamic names -->
+								<label class="col-sm-2 control-label">Closed Department {{$index + 1}}</label>
+								<div class="col-xs-10">
+									<div class="form-horizontal">
+										<div class="form-group" ng-class="{ 'has-error' : (innerForm.department.$invalid || duplicateDept) && submitted }">
+											<label for="department" class="col-sm-2 control-label">Department</label>
+											<div class="col-sm-10">
+												<select required name="department" ng-model="dept.department" class="form-control">
+													<option value="">Select a department</option>
+													<option value="sales">Sales</option>
+													<option value="customer service">Customer Service</option>
+													<option value="chat">Chat</option>
+												</select>
+												<p ng-show="innerForm.department.$invalid && submitted" class="help-block">Please select a department.</p>
+												<p ng-show="duplicateDept && submitted" class="help-block">A department can only be selected once.</p>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">Message</label>
+											<div class="col-sm-10">
+												<textarea ng-model="dept.message" placeholder="<span>Live Chat is closed for the Holiday</span>" class="form-control"></textarea>
+											</div>
+										</div>
+										<div class="form-group text-right">
+											<div class="col-sm-offset-2 col-sm-10">
+												<div class="btn btn-warning" ng-click="removeDept($index)" ng-show="$index > 0">Remove</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ng-form>
 						</div>
+						
+						<div class="form-group text-right">
+					    	<div class="col-sm-offset-2 col-sm-10">
+					        	<div class="btn btn-default" ng-click="addDept()">Add Another Dept.</div>
+					    	</div>
+					    </div>
 					</div>
 					<div id="tab-where" class="tab-pane fade">	
 						<div class="form-group" ng-class="{ 'has-error' : form.platform.$invalid && submitted }">

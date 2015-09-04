@@ -61,6 +61,43 @@
 						<p ng-show="form.endDate.$invalid && form.$submitted" class="help-block">End date is required.</p>
 					</div>				
 				</div>		
+				
+				<div class="form-group" ng-repeat="subgroup in formData.item.subgroups">
+					<hr ng-show="subgroup !== formData.item.subgroups[0]" class="col-xs-11 pull-right">
+					<ng-form name="innerForm"><!-- inner form so validation work for dynamic names -->
+						<label class="col-sm-2 control-label">Subgroup {{$index + 1}}</label>
+						<div class="col-xs-10">
+							<div class="form-horizontal">
+								<div class="form-group" ng-class="{ 'has-error' : innerForm.startDate.$invalid && form.$submitted }">
+									<label for="startDate" class="col-sm-2 control-label">Start Time</label>
+									<div class="col-sm-10">
+										<input ng-model="subgroup.startDate" name="startDate" required type="datetime-local" class="form-control"><!-- min="getDateTimeString(formData.startDate)" max="getDateTimeString(formData.endDate)" -->
+										<p ng-show="innerForm.startDate.$invalid && form.$submitted" class="help-block">Start date is required.</p>
+									</div>				
+								</div>
+								<div class="form-group" ng-class="{ 'has-error' : innerForm.endDate.$invalid && form.$submitted }">
+									<label for="endDate" class="col-sm-2 control-label">End Time</label>
+									<div class="col-sm-10">
+										<input ng-model="subgroup.endDate" name="endDate" required type="datetime-local" class="form-control"><!-- min="getDateTimeString(formData.startDate)" max="getDateTimeString(formData.endDate)" -->
+										<p ng-show="innerForm.endDate.$invalid && form.$submitted" class="help-block">End date is required.</p>
+									</div>				
+								</div>
+								<div class="form-group text-right" ng-show="$index > 0">
+									<div class="col-sm-offset-2 col-sm-10">
+										<div class="btn btn-warning" ng-click="removeSubgroup($index)">Remove</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</ng-form>
+				</div>
+				
+				<div class="form-group text-right">
+			    	<div class="col-sm-offset-2 col-sm-10">
+			        	<div class="btn btn-default" ng-click="addSubgroup()">Add Subgroup</div>
+			    	</div>
+			    </div>
+				
 				<div class="form-group">
 				 	<label for="html" class="col-sm-2 control-label">Show Calender</label>
 			        <div class="col-sm-10 ">	
