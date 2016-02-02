@@ -1,0 +1,20 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "portal",
+  "main": "node.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "author": "me",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "content-disposition": "^0.5.0",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "path": "^0.12.7",
+    "shelljs": "^0.5.3",
+    "telegram.link": "^0.6.4"
+  }
+}

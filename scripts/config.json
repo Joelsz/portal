@@ -1,0 +1,46 @@
+{
+	"directories": {
+		"source": "C:/portal/source/",
+		"scripts": "C:/portal/scripts/"
+	},
+	"routes": [
+		{
+			"contentType": "text/html",
+			"regex": "^/pages",
+			"type": "pages"
+		},
+		{
+			"contentType": "text/html",
+			"regex": "^/$",
+			"type": "pages"
+		},
+		{
+			"contentType": "text/css",
+			"regex": "^/css",
+			"type": "css"
+		},
+		{
+			"regex": "^/js",
+			"type": "js"
+		},
+		{
+			"contentType": "text/css",
+			"regex": "^/plugins(.*)\\.css",
+			"type": "plugins"
+		},
+		{
+			"regex": "^/plugins(.*)\\.js",
+			"type": "plugins"
+		},
+		{
+			"contentType": "image/png",
+			"regex": "^/img",
+			"type": "img"
+		},
+		{
+			"contentType": "application/json",
+			"regex": "^/api",
+			"type": "api"
+		}
+	]
+}
